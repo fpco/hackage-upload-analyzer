@@ -1,6 +1,3 @@
-{-# LANGUAGE OverloadedStrings #-}
-module Main where
-
 import           Control.Concurrent         (threadDelay)
 import           Control.Monad              (forever)
 import           Data.Conduit
@@ -13,7 +10,6 @@ import           Data.List                  (sortBy)
 import           Data.Monoid
 import           Data.Text                  (Text)
 import qualified Data.Text                  as T
---import qualified Data.Text.ICU              as ICU
 import           Data.Text.Lazy.Builder
 import           Data.Text.Lazy.Builder.Int
 import qualified Data.Text.Lazy.IO          as TLIO
@@ -69,8 +65,5 @@ prettyUploadStats now (UploadStats packages users) =
   where
     go title m = mconcat
                $ title
---               : map oneStat (sortBy (smartCompare `on` fst) $ HashMap.toList m)
                : map oneStat (sortBy (flip compare `on` snd) $ HashMap.toList m)
     oneStat (name, count) = fromText name <> ": " <> decimal count <> "\n"
-    --smartCompare = ICU.compare [ICU.CompareIgnoreCase]
-    --smartCompare = compare
